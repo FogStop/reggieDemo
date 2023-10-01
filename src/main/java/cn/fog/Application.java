@@ -3,9 +3,11 @@ package cn.fog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-
+@ServletComponentScan
+//开启拦截其扫描类
 @Slf4j
 public class Application {
 
