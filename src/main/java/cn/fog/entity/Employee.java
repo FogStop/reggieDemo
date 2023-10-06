@@ -29,15 +29,15 @@ public class Employee implements Serializable {
     private String idNumber;//身份证
 
     private Integer status;
-
+    @TableField(fill = FieldFill.INSERT)//插入时填入字段
     private LocalDateTime createTime;
-
+    @TableField(fill = FieldFill.UPDATE)//插入更新天才字段
     private LocalDateTime updateTime;
 
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)//插入时填入字段
     private Long createUser;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)//插入更新天才字段
     private Long updateUser;
 
 }

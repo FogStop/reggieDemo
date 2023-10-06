@@ -1,4 +1,4 @@
-package cn.fog.conf;
+package cn.fog.common;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

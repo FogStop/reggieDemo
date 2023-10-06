@@ -83,7 +83,7 @@
               size="small"
               class="delBut non"
               @click="statusHandle(scope.row)"
-              v-if="user === '2755' ,'admin'"
+              v-if="user === 'admin'"
             >
               {{ scope.row.status == '1' ? '禁用' : '启用' }}
             </el-button>
