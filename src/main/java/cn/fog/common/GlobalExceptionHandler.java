@@ -1,5 +1,6 @@
 package cn.fog.common;
 
+import cn.fog.conf.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,5 +25,12 @@ public class GlobalExceptionHandler {
             return R.error(msg);
         }
         return R.error("未知错误");
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        log.info(ex.getMessage());
+
+        return R.error(ex.getMessage());
     }
 }
