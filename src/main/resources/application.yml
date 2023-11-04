@@ -21,4 +21,4 @@ mybatis-plus:
       id-type: ASSIGN_ID
 
 reggie:
-  path: D:\reggie
+  path: D:\reggie\
