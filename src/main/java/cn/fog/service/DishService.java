@@ -7,4 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface DishService extends IService<Dish> {
 //    新增菜品，同时插入菜品对应空位数据，操作两张表dish,dish_flavor
     void saveWithFlavor(DishDto dishDto);
+//    根据id查询菜品信息和品味信息
+    public DishDto getByWithFlavor(Long id);
+
+    void updateWithFlavor(DishDto dishDto);
 }
