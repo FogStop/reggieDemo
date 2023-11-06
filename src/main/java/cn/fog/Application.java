@@ -17,5 +17,5 @@ public class Application {
         SpringApplication.run(Application.class, args);
         log.info("原神启动@_@");
     }
-
+//      http://127.0.0.1:8081/backend/page/login/login.html  登录网址
 }
