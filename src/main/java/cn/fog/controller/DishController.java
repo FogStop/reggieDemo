@@ -13,9 +13,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,6 +30,8 @@ public class DishController {
     private DishFlavorService dishFlavorService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 新增菜品
@@ -92,7 +96,7 @@ public class DishController {
     }
 
     /**
-     * 更新保存菜品
+     * 修改保存菜品
      * @param dishDto
      * @return
      */
@@ -104,6 +108,49 @@ public class DishController {
     }
 
 
+    /**
+     * 对菜品批量或者是单个 进行停售或者是起售
+     * @return
+     */
+    @PostMapping("/status/{status}")
+//这个参数这里一定记得加注解才能获取到参数，否则这里非常容易出问题
+    public R<String> status(@PathVariable("status") Integer status,@RequestParam List<Long> ids){
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.in(ids !=null,Dish::getId,ids);
+        //根据传入的id集合进行批量查询
+        List<Dish> list = dishService.list(queryWrapper);
+
+        for (Dish dish : list) {
+            if (dish != null){
+                dish.setStatus(status);
+                dishService.updateById(dish);
+            }
+        }
+        //清理所有菜品的缓存数据
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
+
+        return R.success("售卖状态修改成功");
+    }
+
+    /**
+     * 套餐批量删除和单个删除
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(@RequestParam("ids") List<Long> ids){
+        //删除菜品  这里的删除是逻辑删除
+        dishService.deleteByIds(ids);
+        //删除菜品对应的口味  也是逻辑删除
+        LambdaQueryWrapper<DishFlavor> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(DishFlavor::getDishId,ids);
+        dishFlavorService.remove(queryWrapper);
+
+        //清理所有菜品的缓存数据
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
+        return R.success("菜品删除成功");
+    }
 
 
     /**
